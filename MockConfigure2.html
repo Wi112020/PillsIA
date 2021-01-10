@@ -1,0 +1,148 @@
+<html>
+<header>
+  <title>This is a test</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</header>
+<body>
+<h1>Configure Your Tasks</h1>
+<ul id="tasks">
+  <li> Take out trash: <button type="submit" onclick="deleteTask('trash')">Delete</button>
+    <ul>
+      <li><select name="trash" id="trash">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option selected="true">4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+      </select> times a day.
+    </ul>
+  <li> Wash dishes:  <button type="submit" onclick="deleteTask('wash')">Delete</button>
+    <ul>
+      <li>
+      <select id="wash">
+        <option>1</option>
+        <option selected="true">2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+      </select> times a day.
+    </ul>
+  <li> New task:   <button type="submit" onclick="addNewTask()">Add</button>
+    <ul>
+      <li>
+        Name: <input id="new" type="text" width="15"></input> <br>
+      <li>Happens
+      <select id="wash">
+        <option>1</option>
+        <option selected="true">2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+      </select> times a day.
+    </ul>
+
+</ul>
+<script>
+function newTask(thename, times_a_day) {
+    return {
+      name: thename,
+      timesaday: times_a_day
+    }
+}
+var TASKS = [
+  newTask("Wash Dishes", 2),
+  newTask("Take out trash", 6),
+  newTask("Barf", 4),
+  newTask("Barf34", 4)
+]
+
+// Let's create the structure
+function showTasks() {
+  var taskElt = document.getElementById('tasks')
+  var rval = ""
+  for (var i=0; i < TASKS.length; i++) {
+    rval += showATask(TASKS[i], i)
+  }
+    rval += `<li> New task:   <button type="submit" onclick="addNewTask()">Add</button>
+        <ul>
+          <li>
+            Name: <input id="newTaskName" type="text" width="15"></input> <br>
+          <li>Happens
+          <select id="newTaskNumber">
+            <option>1</option>
+            <option selected="true">2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+          </select> times a day.
+        </ul>`
+        taskElt.innerHTML = rval
+}
+
+function showATask(task, index) {
+  var deleteButton = "<button type='submit' onclick='deleteTask("+index+")'>Delete</button>"
+  var rval = "<li>" + task.name + ": "+deleteButton
+  rval += "<ul>"
+  rval += "<li>"
+  rval += '<select id="wash">'
+  for (var i=1; i <= 8; i++) {
+    if (i == task.timesaday) {
+      rval += "<option selected='true'>"+i+"</option>"
+    } else {
+      rval += "<option>"+i+"</option>"
+    }
+  }
+  rval += '</select> times a day.'
+  rval += "</ul>"
+  return rval
+}
+
+function addNewTask() {
+  var name = document.getElementById('newTaskName').value
+  var number = document.getElementById('newTaskNumber').value
+  TASKS.push(newTask(name, number))
+  saveToStorage()
+  showTasks()
+}
+
+function deleteTask(index) {
+  var taskName = TASKS[index].name
+  var result = confirm("Are you sure you want to delete "+taskName+"?")
+  if (result) {
+    TASKS.splice(index, 1)
+    saveToStorage()
+    showTasks()
+  }
+}
+
+function saveToStorage() {
+  localStorage.setItem("fuck", JSON.stringify(TASKS))
+}
+
+function loadFromStorage() {
+  TASKS = JSON.parse(localStorage.getItem("fuck"))
+  if (TASKS == null) {
+    TASKS = []
+  }
+}
+
+loadFromStorage()
+showTasks()
+</script>
+</body>
+</html>
