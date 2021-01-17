@@ -95,7 +95,7 @@ function showTasks() {
 }
 
 function showATask(task, index) {
-  var deleteButton = "<button type='submit' onclick='deleteTask("+index+")'>Delete</button>"
+  var deleteButton = "<button class='btn btn-outline-primary' onclick='deleteTask("+index+")'>Delete</button>"
   var rval = "<li>" + task.name + ": "+deleteButton
   rval += "<ul>"
   rval += "<li>"
