@@ -1,6 +1,6 @@
 <html>
 <header>
-  <title>This is a test</title>
+  <title>Your Pills</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -14,6 +14,85 @@
 </div>
 
 <script>
+function saveToStorage() {
+  localStorage.setItem("keyPill", JSON.stringify(PILLS))
+}
 
+function loadFromStorage() {
+  PILLS = JSON.parse(localStorage.getItem("keyPill"))
+  if (PILLS == null) {
+    PILLS = []
+  }
+}
+
+function loadPillList () {
+  loadFromStorage()
+  var pillElt = document.getElementById('pills')
+  var rval = ""
+  for (var i=0; i < PILLS.length; i++) {
+    rval += loadAPill(PILLS[i], i)
+  }
+  pillElt.innerHTML = rval
+}
+
+function loadAPill (pill, index) {
+  var takenButton = "<button type='submit' onclick='takePill("+index+")'>Taken</button>"
+  var undoButton = "<button type='submit' onclick='untakePill("+index+")'>Undo</button>"
+  var style = 'style="margin-left:15px; margin-bottom: 10px"'
+  var takenNum = getNumTakenToday(pill);
+  var lastTaken = pill.takenList.length > 0 ? pill.takenList[pill.takenList.length-1] : 0
+  var fiveMins = Date.now() - 5*60*1000
+  var rval = ""
+  if (lastTaken < fiveMins)
+  {
+    rval = '<div ' + style + '> <b>' + pill.name + '</b> ' + takenButton + ' ' + takenNum + '/' + pill.timesaday + '</div>'
+  }
+  else rval = '<div ' + style + '> <b>' + pill.name + '</b> ' + undoButton + ' ' + takenNum + '/' + pill.timesaday + '</div>'
+  return rval
+}
+
+function takePill(index) {
+  var now = Date.now()
+  var pill = PILLS[index]
+  var numTaken = getNumTakenToday(pill)
+  if (numTaken >= pill.timesaday)
+  {
+    return
+  }
+  pill.takenList.push(now)
+  saveToStorage()
+  loadPillList()
+}
+
+function untakePill(index) {
+  var pill = PILLS[index]
+  pill.takenList.pop()
+  saveToStorage()
+  loadPillList()
+}
+
+function getNumTakenToday (pill) {
+  var takenNum = 0;
+  var dateStart = new Date()
+  dateStart.setHours(3)
+  dateStart.setMinutes(0)
+  dateStart.setSeconds(0)
+  dateStart.setMilliseconds(0)
+  var startMs = dateStart.valueOf()
+  var startCheck = pill.takenList.length - 10
+  if (startCheck < 0) {
+    startCheck = 0;
+  }
+  for (var i=startCheck; i < pill.takenList.length; i++)
+  {
+    if (pill.takenList[i] > startMs)
+    {
+      takenNum += 1
+    }
+  }
+  return takenNum
+}
+
+loadPillList()
 </script>
 </body>

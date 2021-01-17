@@ -15,7 +15,8 @@
 function newPill(thename, times_a_day) {
     return {
       name: thename,
-      timesaday: times_a_day
+      timesaday: times_a_day,
+      takenList: []
     }
 }
 var PILLS = [
@@ -85,11 +86,11 @@ function deletePill(index) {
 }
 
 function saveToStorage() {
-  localStorage.setItem("fuck", JSON.stringify(PILLS))
+  localStorage.setItem("keyPill", JSON.stringify(PILLS))
 }
 
 function loadFromStorage() {
-  PILLS = JSON.parse(localStorage.getItem("fuck"))
+  PILLS = JSON.parse(localStorage.getItem("keyPill"))
   if (PILLS == null) {
     PILLS = []
   }
