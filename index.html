@@ -9,10 +9,7 @@
 <body>
 <h1>Your Pills <button type="button" class="btn btn-primary" onclick = "gotoEdit()">Edit</button></h1>
 <div id = "pills">
-  <div style="margin-left:15px; margin-bottom: 10px"><b>Vitamin C</b> <button type="button" onclick="takePill(0)">Take</button>: 0/5</div>
-  <div style="margin-left:15px; margin-bottom: 10px"><b>Gabapentin</b><button type="button" onclick="takePill(1)">Take</button>: 1/4</div>
 </div>
-
 <script>
 function saveToStorage() {
   localStorage.setItem("keyPill", JSON.stringify(PILLS))
@@ -47,7 +44,9 @@ function loadAPill (pill, index) {
   {
     rval = '<div ' + style + '> <b>' + pill.name + '</b> ' + takenButton + ' ' + takenNum + '/' + pill.timesaday + '</div>'
   }
-  else rval = '<div ' + style + '> <b>' + pill.name + '</b> ' + undoButton + ' ' + takenNum + '/' + pill.timesaday + '</div>'
+  else {
+    rval = '<div ' + style + '> <b>' + pill.name + '</b> ' + undoButton + ' ' + takenNum + '/' + pill.timesaday + '</div>'
+  }
   return rval
 }
 
@@ -96,6 +95,11 @@ function getNumTakenToday (pill) {
 function gotoEdit () {
   window.location.href = "edit.html"
 }
+
+function reload (pill, index) {
+  setTimeout(loadPillList(), (10*5*60))
+}
+
 loadPillList()
 </script>
 </body>

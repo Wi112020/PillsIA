@@ -7,7 +7,7 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </header>
 <body>
-<h1>Configure Your Pills</h1>
+<h1>Configure Your Pills <button type="button" class="btn btn-primary" onclick = "gotoIndex()">Done</button></h1>
 <ul id="pills">
 
 </ul>
@@ -19,6 +19,7 @@ function newPill(thename, times_a_day) {
       takenList: []
     }
 }
+
 var PILLS = [
 
 ]
@@ -54,7 +55,7 @@ function showAPill(pill, index) {
   var rval = "<li>" + pill.name + ": "+deleteButton
   rval += "<ul>"
   rval += "<li>"
-  rval += '<select id="wash">'
+  rval += '<select id="'+index+'" onchange="updateTimesADay('+index+')">'
   for (var i=1; i <= 8; i++) {
     if (i == pill.timesaday) {
       rval += "<option selected='true'>"+i+"</option>"
@@ -96,6 +97,16 @@ function loadFromStorage() {
   }
 }
 
+function gotoIndex () {
+  window.location.href = "index.html"
+}
+
+function updateTimesADay (index) {
+  var selectEl = document.getElementById(index)
+  var value = selectEl.options[selectEl.selectedIndex].text
+  PILLS[index].timesaday = value
+  saveToStorage()
+}
 loadFromStorage()
 showPills()
 </script>
