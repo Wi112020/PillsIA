@@ -35,7 +35,8 @@ function loadPillList () {
 function loadAPill (pill, index) {
   var takenButton = "<button type='submit' onclick='takePill("+index+")'>Taken</button>"
   var undoButton = "<button type='submit' onclick='untakePill("+index+")'>Undo</button>"
-  var style = 'style="margin-left:15px; margin-bottom: 10px"'
+  var color = getColor(pill)
+  var style = 'style="margin-left:15px; margin-bottom: 10px; color: '+color+';"'
   var takenNum = getNumTakenToday(pill);
   var lastTaken = pill.takenList.length > 0 ? pill.takenList[pill.takenList.length-1] : 0
   var fiveMins = Date.now() - 5*60*1000
@@ -98,6 +99,43 @@ function gotoEdit () {
 
 function reload (pill, index) {
   setTimeout(loadPillList(), (10*5*60))
+}
+
+function getColor (pill) {
+  var color = "black"
+  if (pill.timesaday == 1)
+  {
+    color = "purple"
+  }
+  else if (pill.timesaday == 2)
+  {
+    color = "red"
+  }
+  else if (pill.timesaday == 3)
+  {
+    color = "orange"
+  }
+  else if (pill.timesaday == 4)
+  {
+    color = "green"
+  }
+  else if (pill.timesaday == 5)
+  {
+    color = "blue"
+  }
+  else if (pill.timesaday == 6)
+  {
+    color = "#aaaa00"
+  }
+  else if (pill.timesaday == 7)
+  {
+    color = "#00aaaa"
+  }
+  else if (pill.timesaday == 8)
+  {
+    color = "#ffaa00"
+  }
+  return color
 }
 
 loadPillList()
